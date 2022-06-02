@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import validateEmail from './utils/validateEmail';
 import validatePassword from './utils/validatePassword';
-import styles from './Signup.module.css';
+import styles from './Auth.module.css';
+import { auth } from './firebase';
+import { createUserWithEmailAndPassword} from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../app/store/actions';
 
-export default function SignupForm({setIsSignup, auth, createUserWithEmailAndPassword}) {
+export default function SignupForm({setIsSignup}) {
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isEmailErrorShowed, setIsEmailErrorShowed] = useState(false);
@@ -26,6 +31,7 @@ export default function SignupForm({setIsSignup, auth, createUserWithEmailAndPas
         }
         try {
             await createUserWithEmailAndPassword(auth, email, password);
+            dispatch(loginAction())
             setIsSignup(false);
         } catch (error) {
             console.log(error)
@@ -48,19 +54,19 @@ export default function SignupForm({setIsSignup, auth, createUserWithEmailAndPas
     
     return (
         <div>
-            <div className={styles.signup}>
+            <div className={styles.auth}>
                 <h2>Create an Account</h2>
                 <p>Lorem Ipsum is simply dummy text</p>
-                <form className={styles.signupForm}>
+                <form className={styles.authForm}>
                     <label htmlFor='email'>Email</label>
                     <input type="email" value={email} onInput={handleEmailInput} id="email" />
                     {isEmailErrorShowed ? <div className={styles.errorMessage}>Enter valid email</div> : null}
                     <label htmlFor='password'>Password</label>
                     <input type="password" value={password} onInput={handlePasswordInput} id="password" />
                     {isPasswordErrorShowed ? <div className={styles.errorMessage}>Password must contain at least 8 symbols, at least 1 number, at least 1 capital</div> : null}
-                    <input className={styles.signupButton} type="submit" value="Create an Account" onClick={createUser} />
+                    <input className={styles.authButton} type="submit" value="Create an Account" onClick={createUser} />
                 </form>
-                <div className={styles.loginAccount}>Already have an Account? <a onClick={backToLogin}>Login</a></div>
+                <div className={styles.otherOption}>Already have an Account? <a onClick={backToLogin}>Login</a></div>
             </div>
         </div>
     )

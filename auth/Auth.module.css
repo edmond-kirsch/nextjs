@@ -9,10 +9,30 @@
 .logoWrapper {
     width: 50%;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.logo {
+    width: 40%;
+    height: 40%;
     background-image: url('./softteco.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+}
+.authWrapper {
+    max-width: 810px;
+    width: 50%;
+    min-width: 320px;
+    height: 100vh;
+    background-color: #fff;
+    padding: 140px 100px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 .loginWrapper {
     max-width: 810px;
@@ -90,6 +110,8 @@
     border-radius: 5px;
     margin-bottom: 25px;
     padding: 0;
+    box-sizing: border-box;
+    padding-left: 10px;
 }
 .loginForm input:last-child {
     margin: 0;
@@ -113,7 +135,7 @@
     background-color: #1e96f0;
 }
 @media (max-width: 950px) {
-    .loginWrapper {
+    .authWrapper {
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;

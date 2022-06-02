@@ -3,7 +3,7 @@ import validateEmail from './utils/validateEmail';
 import validatePassword from './utils/validatePassword';
 import styles from './Signup.module.css';
 
-export default function SignUp({setIsPopupShowed, auth, createUserWithEmailAndPassword}) {
+export default function SignupForm({setIsSignup, auth, createUserWithEmailAndPassword}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isEmailErrorShowed, setIsEmailErrorShowed] = useState(false);
@@ -26,7 +26,7 @@ export default function SignUp({setIsPopupShowed, auth, createUserWithEmailAndPa
         }
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            setIsPopupShowed(false);
+            setIsSignup(false);
         } catch (error) {
             console.log(error)
         }
@@ -43,11 +43,11 @@ export default function SignUp({setIsPopupShowed, auth, createUserWithEmailAndPa
     }
 
     const backToLogin = () => {
-        setIsPopupShowed(false);
+        setIsSignup(false);
     }
     
     return (
-        <div className={styles.signupWrapper}>
+        <div>
             <div className={styles.signup}>
                 <h2>Create an Account</h2>
                 <p>Lorem Ipsum is simply dummy text</p>

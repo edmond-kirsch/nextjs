@@ -1,15 +1,37 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { getAuth } from 'firebase/auth';
 import { SwitchTransition, CSSTransition, Transition } from 'react-transition-group';
-import SignupForm from './SignupForm';
-import LoginForm from './LoginForm';
-import styles from './Auth.module.css';
+import { ChakraProvider } from '@chakra-ui/react';
+import styles from './styles/Auth.module.css';
+import SignupForm from './components/SignupForm';
+import LoginForm from './components/LoginForm';
+import Loading from './components/Loading';
+import firebaseClient from './firebaseClient';
 
 export function Auth() {
+    firebaseClient();
     const [isSignup, setIsSignup] = useState(false);
     const nodeRef = useRef(null);
+    const routes = useRouter();
+    const [pending, setPending] = useState(true);
+
+    useEffect(() => {
+        return getAuth().onAuthStateChanged(async (user) => {
+            if (user) {
+                routes.push('/');
+            } else {
+                setPending(false);
+            }
+        })
+    }, [])
+    if (pending) {
+        return <Loading />
+    }
     
     return (
+        <ChakraProvider>
         <div className={styles.wrapper}>
             <style jsx>{`
                 .${styles.logo}.entering {
@@ -80,19 +102,16 @@ export function Auth() {
                 >
                     {isSignup ?
                         <div ref={nodeRef} className={styles.authWrapper}>
-                            <SignupForm
-                                setIsSignup={setIsSignup}
-                            />
+                            <SignupForm setIsSignup={setIsSignup} />
                         </div>
                         : 
                         <div ref={nodeRef} className={styles.authWrapper}>
-                            <LoginForm
-                                setIsSignup={setIsSignup}
-                            />    
+                            <LoginForm setIsSignup={setIsSignup} />    
                         </div>
                     }
                 </CSSTransition>
             </SwitchTransition>
         </div>
+        </ChakraProvider>
     )
 }

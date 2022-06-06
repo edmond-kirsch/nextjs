@@ -7,6 +7,7 @@
     justify-content: flex-end;
     font-family: 'Open Sans';
     margin: 0 auto;
+    overflow: hidden;
 }
 .logoWrapper {
     width: 60%;
@@ -19,7 +20,7 @@
 .logo {
     width: 40%;
     height: 40%;
-    background-image: url('./softteco.png');
+    background-image: url('../assets//softteco.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
@@ -75,7 +76,7 @@
     background-color: #eceff1;
 }
 .googleIcon {
-    background-image: url('./google.png');
+    background-image: url('../assets/google.png');
     width: 25px;
     height: 25px;
 }
@@ -124,6 +125,10 @@
 .authButton:hover {
     color: #fff;
     background-color: #1e96f0;
+}
+.authButton:disabled {
+    color: #fff;
+    background-color: #465a64;
 }
 @media (max-width: 950px) {
     .authWrapper {

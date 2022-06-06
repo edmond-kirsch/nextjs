@@ -1,3 +1,2 @@
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-export const logout = async () => signOut(auth);
+import { signOut, getAuth } from "firebase/auth";
+export const logout = async () => signOut(getAuth());

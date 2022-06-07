@@ -5,6 +5,7 @@ import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import validateEmail from '../utils/validateEmail';
 import validatePassword from '../utils/validatePassword';
+import { locales } from '../../locales';
 
 export default function SignupForm({setIsSignup}) {
     const toast = useToast();
@@ -14,6 +15,7 @@ export default function SignupForm({setIsSignup}) {
     const handleEmailInput = (e) => setEmail(e.target.value);
     const handlePasswordInput = (e) => setPassword(e.target.value);
     const backToLogin = () => setIsSignup(false);
+    const locale = router.locale;
 
     const createUser = async (e) => {
         e.preventDefault();
@@ -68,16 +70,16 @@ export default function SignupForm({setIsSignup}) {
     return (
         <div>
             <div className={styles.auth}>
-                <h2>Create an Account</h2>
-                <p>Lorem Ipsum is simply dummy text</p>
+                <h2>{locales[locale].auth.create}</h2>
+                <p>{locales[locale].auth.createParagraph}</p>
                 <form className={styles.authForm}>
-                    <label htmlFor='email'>Email</label>
+                    <label htmlFor='email'>{locales[locale].auth.email}</label>
                     <input type="email" value={email} onInput={handleEmailInput} id="email" />
-                    <label htmlFor='password'>Password</label>
+                    <label htmlFor='password'>{locales[locale].auth.password}</label>
                     <input type="password" value={password} onInput={handlePasswordInput} id="password" />
-                    <input className={styles.authButton} type="submit" value="Create an Account" onClick={createUser} />
+                    <input className={styles.authButton} type="submit" value={locales[locale].auth.create} onClick={createUser} />
                 </form>
-                <div className={styles.otherOption}>Already have an Account? <a onClick={backToLogin}>Login</a></div>
+                <div className={styles.otherOption}>{locales[locale].auth.createAlreadyHave}<a onClick={backToLogin}>{locales[locale].auth.login}</a></div>
             </div>
         </div>
     )

@@ -4,6 +4,8 @@ import { signInWithPopup, signInWithEmailAndPassword, getAuth } from "firebase/a
 import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import { GoogleProvider } from '../googleProvider';
+import { locales } from '../../locales';
+import nookies from 'nookies';
 
 export default function LoginForm({setIsSignup}) {
     const toast = useToast();
@@ -13,6 +15,7 @@ export default function LoginForm({setIsSignup}) {
     const showCreateForm = () => setIsSignup(true);
     const handleEmailInput = e => setEmail(e.target.value);
     const handlePasswordInput = e => setPassword(e.target.value);
+    const locale = nookies.get().locale || router.locale;
 
     const loginWithGoogle = async () => {
         try {
@@ -50,22 +53,22 @@ export default function LoginForm({setIsSignup}) {
     return (
         <>
             <div className={styles.auth}>
-                <h2>Login to your Account</h2>
-                <p>Lorem Ipsum is simply dummy text</p>
+                <h2>{locales[locale].auth.loginHeader}</h2>
+                <p>{locales[locale].auth.loginParagraph}</p>
                 <button className={styles.googleSignIn} onClick={loginWithGoogle}>
                     <div className={styles.googleIcon}></div>
-                    Continue with Google
+                    {locales[locale].auth.loginWithGoogle}
                 </button>
-                <p className={styles.emailSignIn}>----------- or Sign in with Email ----------- </p>
+                <p className={styles.emailSignIn}>{locales[locale].auth.loginWithEmail}</p>
                 <form className={styles.authForm}>
-                    <label htmlFor='email'>Email</label>
+                    <label htmlFor='email'>{locales[locale].auth.email}</label>
                     <input type="email" value={email} onInput={handleEmailInput} id="email" />
-                    <label htmlFor='password'>Password</label>
+                    <label htmlFor='password'>{locales[locale].auth.password}</label>
                     <input type="password" value={password} onInput={handlePasswordInput} id="password" />
-                    <input className={styles.authButton} type="submit" value="Login" onClick={loginWithEmail} disabled={email === "" || password === ""}/>
+                    <input className={styles.authButton} type="submit" value={locales[locale].auth.login} onClick={loginWithEmail} disabled={email === "" || password === ""}/>
                 </form>
             </div>
-            <div className={styles.otherOption}>Not registered yet? <a onClick={showCreateForm}>Create an account</a></div>
+            <div className={styles.otherOption}>{locales[locale].auth.loginNotRegistered}<a onClick={showCreateForm}>{locales[locale].auth.create}</a></div>
         </>
     )
 }

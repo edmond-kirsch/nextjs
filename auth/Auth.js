@@ -20,12 +20,14 @@ export function Auth() {
     useEffect(() => {
         return getAuth().onAuthStateChanged(async (user) => {
             if (user) {
-                routes.push('/');
+                await routes.push('/');
+                setPending(false);
             } else {
                 setPending(false);
             }
         })
     }, [])
+
     if (pending) {
         return <Loading />
     }

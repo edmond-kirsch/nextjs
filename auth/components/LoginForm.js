@@ -24,6 +24,7 @@ export default function LoginForm({setIsSignup}) {
         } catch (error) {
             const message = error.message;
             toast({
+                position: 'top',
                 title: "An error ocurred",
                 description: message,
                 status: "error",
@@ -41,6 +42,7 @@ export default function LoginForm({setIsSignup}) {
         } catch (error) {
             const message = error.message;
             toast({
+                position: 'top',
                 title: "An error ocurred",
                 description: message,
                 status: "error",

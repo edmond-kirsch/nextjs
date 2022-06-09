@@ -34,8 +34,8 @@ export default function LoginForm({setIsSignup}) {
         }
     }
 
-    const loginWithEmail = async (e) => {
-        e.preventDefault();
+    const loginWithEmail = async (event) => {
+        event.preventDefault();
         try {
             await signInWithEmailAndPassword(getAuth(), email, password);
             router.push('/');

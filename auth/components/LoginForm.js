@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { signInWithPopup, signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useToast } from '@chakra-ui/react';
@@ -10,11 +10,9 @@ import nookies from 'nookies';
 export default function LoginForm({setIsSignup}) {
     const toast = useToast();
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const email = useRef();
+    const password = useRef();
     const showCreateForm = () => setIsSignup(true);
-    const handleEmailInput = e => setEmail(e.target.value);
-    const handlePasswordInput = e => setPassword(e.target.value);
     const locale = nookies.get().locale || router.locale;
 
     const loginWithGoogle = async () => {
@@ -37,7 +35,7 @@ export default function LoginForm({setIsSignup}) {
     const loginWithEmail = async (event) => {
         event.preventDefault();
         try {
-            await signInWithEmailAndPassword(getAuth(), email, password);
+            await signInWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
             router.push('/');
         } catch (error) {
             const message = error.message;
@@ -75,9 +73,9 @@ export default function LoginForm({setIsSignup}) {
                 <p className={styles.emailSignIn}>{locales[locale].auth.loginWithEmail}</p>
                 <form className={styles.authForm}>
                     <label htmlFor='email'>{locales[locale].auth.email}</label>
-                    <input type="email" value={email} onInput={handleEmailInput} id="email" />
+                    <input ref={email} type="email" id="email" />
                     <label htmlFor='password'>{locales[locale].auth.password}</label>
-                    <input type="password" value={password} onInput={handlePasswordInput} id="password" />
+                    <input ref={password} type="password" id="password" />
                     <input className={styles.authButton} type="submit" value={locales[locale].auth.login} onClick={loginWithEmail} disabled={email === "" || password === ""}/>
                 </form>
             </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth, createUserWithEmailAndPassword}  from "firebase/auth";
 import { useToast } from '@chakra-ui/react';
@@ -10,17 +10,15 @@ import { locales } from '../../locales';
 export default function SignupForm({setIsSignup}) {
     const toast = useToast();
     const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const handleEmailInput = (e) => setEmail(e.target.value);
-    const handlePasswordInput = (e) => setPassword(e.target.value);
+    const email = useRef();
+    const password = useRef();
     const backToLogin = () => setIsSignup(false);
     const locale = router.locale;
 
     const createUser = async (e) => {
         e.preventDefault();
-        if (!validateEmail(email, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN) || !validatePassword(password)) {
-            if (!validateEmail(email, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN)) {
+        if (!validateEmail(email.current.value, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN) || !validatePassword(password.current.value)) {
+            if (!validateEmail(email.current.value, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN)) {
                 if (!toast.isActive('mail-error')) {
                     toast({
                         position: 'top',
@@ -34,7 +32,7 @@ export default function SignupForm({setIsSignup}) {
                 }
             }
 
-            if (!validatePassword(password)) {
+            if (!validatePassword(password.current.value)) {
                 if (!toast.isActive('pass-error')) {
                     toast({
                         position: 'top',
@@ -52,7 +50,7 @@ export default function SignupForm({setIsSignup}) {
         }
 
         try {
-            await createUserWithEmailAndPassword(getAuth(), email, password);
+            await createUserWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
             setIsSignup(false);
             router.push('/');
         } catch (error) {
@@ -67,8 +65,6 @@ export default function SignupForm({setIsSignup}) {
         }
     }
 
-
-    
     return (
         <div>
             <div className={styles.auth}>
@@ -76,9 +72,9 @@ export default function SignupForm({setIsSignup}) {
                 <p>{locales[locale].auth.createParagraph}</p>
                 <form className={styles.authForm}>
                     <label htmlFor='email'>{locales[locale].auth.email}</label>
-                    <input type="email" value={email} onInput={handleEmailInput} id="email" />
+                    <input ref={email} type="email" id="email" />
                     <label htmlFor='password'>{locales[locale].auth.password}</label>
-                    <input type="password" value={password} onInput={handlePasswordInput} id="password" />
+                    <input ref={password} type="password" id="password" />
                     <input className={styles.authButton} type="submit" value={locales[locale].auth.create} onClick={createUser} />
                 </form>
                 <div className={styles.otherOption}>{locales[locale].auth.createAlreadyHave}<a onClick={backToLogin}>{locales[locale].auth.login}</a></div>

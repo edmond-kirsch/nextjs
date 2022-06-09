@@ -111,15 +111,9 @@ export function Auth() {
                     classNames='fade'
                     nodeRef={nodeRef}
                 >
-                    {isSignup ?
-                        <div ref={nodeRef} className={styles.authWrapper}>
-                            <SignupForm setIsSignup={setIsSignup} />
-                        </div>
-                        : 
-                        <div ref={nodeRef} className={styles.authWrapper}>
-                            <LoginForm setIsSignup={setIsSignup} />    
-                        </div>
-                    }
+                <div ref={nodeRef} className={styles.authWrapper}>
+                    {isSignup ?<SignupForm setIsSignup={setIsSignup} /> : <LoginForm setIsSignup={setIsSignup} /> }
+                </div>
                 </CSSTransition>
             </SwitchTransition>
         </div>

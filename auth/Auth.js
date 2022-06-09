@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getAuth } from 'firebase/auth';
@@ -19,11 +18,21 @@ export function Auth() {
 
     useEffect(() => {
         return getAuth().onAuthStateChanged(async (user) => {
-            if (user) {
-                await routes.push('/');
+            try {
+                if (user) {
+                    await routes.push('/');
+                }
                 setPending(false);
-            } else {
-                setPending(false);
+            } catch(error) {
+                const message = error.message;
+                toast({
+                    position: 'top',
+                    title: "An error ocurred",
+                    description: message,
+                    status: "error",
+                    duration: 6000,
+                    isClosable: true
+                })
             }
         })
     }, [])

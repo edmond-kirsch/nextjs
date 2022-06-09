@@ -17,33 +17,34 @@ export default function SignupForm({setIsSignup}) {
 
     const createUser = async (e) => {
         e.preventDefault();
-        if (!validateEmail(email.current.value, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN) || !validatePassword(password.current.value)) {
-            if (!validateEmail(email.current.value, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN)) {
-                if (!toast.isActive('mail-error')) {
-                    toast({
-                        position: 'top',
-                        id: 'mail-error',
-                        title: "An error ocurred",
-                        description: 'Enter valid email',
-                        status: "error",
-                        duration: 6000,
-                        isClosable: true
-                    })
-                }
+        
+        if (!validateEmail(email.current.value, process.env.NEXT_PUBLIC_ALLOWED_DOMAIN)) {
+            if (!toast.isActive('mail-error')) {
+                toast({
+                    position: 'top',
+                    id: 'mail-error',
+                    title: "An error ocurred",
+                    description: 'Enter valid email',
+                    status: "error",
+                    duration: 6000,
+                    isClosable: true
+                })
             }
+            
+            return;
+        }
 
-            if (!validatePassword(password.current.value)) {
-                if (!toast.isActive('pass-error')) {
-                    toast({
-                        position: 'top',
-                        id: 'pass-error',
-                        title: "An error ocurred",
-                        description: 'Password must contain at least 8 symbols, at least 1 number, at least 1 capital',
-                        status: "error",
-                        duration: 6000,
-                        isClosable: true
-                    })
-                }
+        if (!validatePassword(password.current.value)) {
+            if (!toast.isActive('pass-error')) {
+                toast({
+                    position: 'top',
+                    id: 'pass-error',
+                    title: "An error ocurred",
+                    description: 'Password must contain at least 8 symbols, at least 1 number, at least 1 capital',
+                    status: "error",
+                    duration: 6000,
+                    isClosable: true
+                })
             }
 
             return;

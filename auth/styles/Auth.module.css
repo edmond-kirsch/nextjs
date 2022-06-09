@@ -75,11 +75,6 @@
 .googleSignIn:hover {
     background-color: #eceff1;
 }
-.googleIcon {
-    background-image: url('../assets/google.png');
-    width: 25px;
-    height: 25px;
-}
 .emailSignIn {
     margin: 0;
     padding: 0;

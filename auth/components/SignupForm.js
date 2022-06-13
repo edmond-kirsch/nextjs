@@ -6,10 +6,12 @@ import styles from '../styles/Auth.module.css';
 import validateEmail from '../utils/validateEmail';
 import validatePassword from '../utils/validatePassword';
 import { locales } from '../../locales';
+import useTranslation from 'next-translate/useTranslation';
 
 export default function SignupForm({setIsSignup}) {
     const toast = useToast();
     const router = useRouter();
+    const { t } = useTranslation('auth');
     const email = useRef();
     const password = useRef();
     const backToLogin = () => setIsSignup(false);
@@ -51,8 +53,10 @@ export default function SignupForm({setIsSignup}) {
         }
 
         try {
-            await createUserWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
+            const { user } = await createUserWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
             setIsSignup(false);
+            const token = await user.getIdToken();
+            nookies.set(undefined, "token", token, {});
             router.push('/');
         } catch (error) {
             const message = error.message;
@@ -69,16 +73,16 @@ export default function SignupForm({setIsSignup}) {
     return (
         <div>
             <div className={styles.auth}>
-                <h2>{locales[locale].auth.create}</h2>
-                <p>{locales[locale].auth.createParagraph}</p>
+                <h2>{t('create')}</h2>
+                <p>{t('createParagraph')}</p>
                 <form className={styles.authForm}>
-                    <label htmlFor='email'>{locales[locale].auth.email}</label>
+                    <label htmlFor='email'>{t('email')}</label>
                     <input ref={email} type="email" id="email" />
-                    <label htmlFor='password'>{locales[locale].auth.password}</label>
+                    <label htmlFor='password'>{t('password')}</label>
                     <input ref={password} type="password" id="password" />
-                    <input className={styles.authButton} type="submit" value={locales[locale].auth.create} onClick={createUser} />
+                    <input className={styles.authButton} type="submit" value={t('create')} onClick={createUser} />
                 </form>
-                <div className={styles.otherOption}>{locales[locale].auth.createAlreadyHave}<a onClick={backToLogin}>{locales[locale].auth.login}</a></div>
+                <div className={styles.otherOption}>{locales[locale].auth.createAlreadyHave}<a onClick={backToLogin}>{t('login')}</a></div>
             </div>
         </div>
     )

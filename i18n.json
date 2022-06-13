@@ -1,0 +1,9 @@
+{
+    "locales": ["en", "ru"],
+    "defaultLocale": "en",
+    "pages": {
+      "/": ["home"],
+      "/test": ["test"],
+      "/auth": ["auth"]
+    }
+  }

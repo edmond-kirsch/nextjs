@@ -1,25 +1,46 @@
 import Link from 'next/link';
+import nookies from 'nookies';
+import useTranslation from 'next-translate/useTranslation';
+import setLanguage from 'next-translate/setLanguage';
 import { useAuth } from '../auth/AuthProvider';
-import { useRouter } from 'next/router';
-import nookies from 'nookies'
 import Layout from '../components/Layout';
+
 
 export default function Home() {
   const {user} = useAuth();
-  const router = useRouter();
-  const locale = nookies.get().locale || router.locale;
-  const greeting = locale === 'en' ? 'hello' : locale === 'ru' ? 'привет' : 'unknown';
-  const choose = locale === 'en' ? 'choose language' : locale === 'ru' ? 'выбрать язык' : 'unknown';
-  const changeLocale = locale => nookies.set(undefined, "locale", locale, {});
+  const { t } = useTranslation('home');
+  const changeLocale = async (locale) => {
+    nookies.destroy('locale');
+    nookies.set(null, "locale", locale, {});
+    await setLanguage(locale);
+  }
+
   return (
     <Layout>
       <div>
         <div>User ID {user ? user.uid : 'No user signed in'}</div>
-        <div>{greeting}</div>
-        <div>{choose}</div>
-        <Link href={router.asPath} locale='en'><a onClick={() => changeLocale('en')}>English</a></Link>
-        <Link href={router.asPath} locale='ru'><a onClick={() => changeLocale('ru')}>Русский</a></Link>
+        <div>{t('greeting')}</div>
+        <div>{t('choose')}</div>
+        <Link href={'/'} locale='en'><a onClick={() => changeLocale('en')}>English</a></Link>
+        <Link href={'/'} locale='ru'><a onClick={() => changeLocale('ru')}>Русский</a></Link>
       </div>
     </Layout>
   )
+}
+
+export async function getServerSideProps(context) {
+  const cookieLocale = nookies.get(context).locale;
+  if (cookieLocale && context.locale !== cookieLocale) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/${cookieLocale}`,
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

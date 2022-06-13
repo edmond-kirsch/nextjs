@@ -1,24 +1,26 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { signInWithPopup, signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import { GoogleProvider } from '../googleProvider';
-import { locales } from '../../locales';
 import nookies from 'nookies';
+import useTranslation from 'next-translate/useTranslation';
 
-export default function LoginForm({setIsSignup}) {
+export default function LoginForm({ setIsSignup }) {
     const toast = useToast();
     const router = useRouter();
+    const { t } = useTranslation('auth');
     const email = useRef();
     const password = useRef();
     const showCreateForm = () => setIsSignup(true);
-    const locale = nookies.get().locale || router.locale;
 
     const loginWithGoogle = async () => {
         try {
-            await signInWithPopup(getAuth(), GoogleProvider);
-            router.push('/');
+            const { user } = await signInWithPopup(getAuth(), GoogleProvider);
+            const token = await user.getIdToken();
+            nookies.set(undefined, "token", token, {});
+            await router.push('/');
         } catch (error) {
             const message = error.message;
             toast({
@@ -35,7 +37,9 @@ export default function LoginForm({setIsSignup}) {
     const loginWithEmail = async (event) => {
         event.preventDefault();
         try {
-            await signInWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
+            const { user } = await signInWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
+            const token = await user.getIdToken();
+            nookies.set(undefined, "token", token, {});
             router.push('/');
         } catch (error) {
             const message = error.message;
@@ -53,8 +57,8 @@ export default function LoginForm({setIsSignup}) {
     return (
         <>
             <div className={styles.auth}>
-                <h2>{locales[locale].auth.loginHeader}</h2>
-                <p>{locales[locale].auth.loginParagraph}</p>
+                <h2>{t('loginHeader')}</h2>
+                <p>{t('loginParagraph')}</p>
                 <button className={styles.googleSignIn} onClick={loginWithGoogle}>
                 <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={25} height={25} viewBox="0 0 48 48">
                     <defs>
@@ -68,18 +72,18 @@ export default function LoginForm({setIsSignup}) {
                     <path clipPath="url(#b)" fill="#34A853" d="m0 37 30-23 7.9 1L48 0v48H0z"/>
                     <path clipPath="url(#b)" fill="#4285F4" d="M48 48 17 24l-4-3 35-10z"/>
                 </svg>
-                    {locales[locale].auth.loginWithGoogle}
+                    {t('loginWithGoogle')}
                 </button>
-                <p className={styles.emailSignIn}>{locales[locale].auth.loginWithEmail}</p>
+                <p className={styles.emailSignIn}>{t('loginWithEmail')}</p>
                 <form className={styles.authForm}>
-                    <label htmlFor='email'>{locales[locale].auth.email}</label>
+                    <label htmlFor='email'>{t('email')}</label>
                     <input ref={email} type="email" id="email" />
-                    <label htmlFor='password'>{locales[locale].auth.password}</label>
+                    <label htmlFor='password'>{t('password')}</label>
                     <input ref={password} type="password" id="password" />
-                    <input className={styles.authButton} type="submit" value={locales[locale].auth.login} onClick={loginWithEmail} disabled={email === "" || password === ""}/>
+                    <input className={styles.authButton} type="submit" value={t('login')} onClick={loginWithEmail} disabled={email === "" || password === ""}/>
                 </form>
             </div>
-            <div className={styles.otherOption}>{locales[locale].auth.loginNotRegistered}<a onClick={showCreateForm}>{locales[locale].auth.create}</a></div>
+            <div className={styles.otherOption}>{t('loginNotRegistered')}<a onClick={showCreateForm}>{t('create')}</a></div>
         </>
     )
 }

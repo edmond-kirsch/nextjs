@@ -2,12 +2,11 @@ import Link from 'next/link';
 import nookies from 'nookies';
 import useTranslation from 'next-translate/useTranslation';
 import setLanguage from 'next-translate/setLanguage';
-import { useAuth } from '../auth/AuthProvider';
 import Layout from '../components/Layout';
-
+import AuthAdapter from '../auth/AuthAdapter';
 
 export default function Home() {
-  const {user} = useAuth();
+  const user = AuthAdapter.getUser()
   const { t } = useTranslation('home');
   const changeLocale = async (locale) => {
     nookies.destroy('locale');

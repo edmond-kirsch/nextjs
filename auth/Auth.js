@@ -1,23 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getAuth } from 'firebase/auth';
 import { SwitchTransition, CSSTransition, Transition } from 'react-transition-group';
 import { ChakraProvider } from '@chakra-ui/react';
 import styles from './styles/Auth.module.css';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
 import Loading from './components/Loading';
-import firebaseClient from './firebaseClient';
+import AuthAdapter from './AuthAdapter';
 
 export function Auth() {
-    firebaseClient();
+    AuthAdapter.initFirebaseClient();
     const [isSignup, setIsSignup] = useState(false);
     const nodeRef = useRef(null);
     const routes = useRouter();
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        return getAuth().onAuthStateChanged(async (user) => {
+        return AuthAdapter.getAuth().onAuthStateChanged(async (user) => {
             try {
                 if (user) {
                     await routes.push('/');

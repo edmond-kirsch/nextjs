@@ -1,11 +1,9 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
-import { signInWithPopup, signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
-import { GoogleProvider } from '../googleProvider';
-import nookies from 'nookies';
 import useTranslation from 'next-translate/useTranslation';
+import AuthAdapter from '../AuthAdapter';
 
 export default function LoginForm({ setIsSignup }) {
     const toast = useToast();
@@ -16,12 +14,7 @@ export default function LoginForm({ setIsSignup }) {
     const showCreateForm = () => setIsSignup(true);
 
     const loginWithGoogle = async () => {
-        try {
-            const { user } = await signInWithPopup(getAuth(), GoogleProvider);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
-            await router.push('/');
-        } catch (error) {
+        AuthAdapter.loginWithGoogle().then(() => router.push('/')).catch((error) => {
             const message = error.message;
             toast({
                 position: 'top',
@@ -31,17 +24,12 @@ export default function LoginForm({ setIsSignup }) {
                 duration: 6000,
                 isClosable: true
             })
-        }
+        })
     }
-
+    
     const loginWithEmail = async (event) => {
         event.preventDefault();
-        try {
-            const { user } = await signInWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
-            router.push('/');
-        } catch (error) {
+        AuthAdapter.loginWithEmail(email.current.value, password.current.value).then(() => router.push('/')).catch((error) => {
             const message = error.message;
             toast({
                 position: 'top',
@@ -51,7 +39,7 @@ export default function LoginForm({ setIsSignup }) {
                 duration: 6000,
                 isClosable: true
             })
-        }
+        })
     }
 
     return (

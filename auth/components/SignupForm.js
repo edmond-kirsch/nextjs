@@ -1,12 +1,11 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
-import { getAuth, createUserWithEmailAndPassword}  from "firebase/auth";
 import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import validateEmail from '../utils/validateEmail';
 import validatePassword from '../utils/validatePassword';
-import { locales } from '../../locales';
 import useTranslation from 'next-translate/useTranslation';
+import AuthAdapter from '../AuthAdapter';
 
 export default function SignupForm({setIsSignup}) {
     const toast = useToast();
@@ -15,7 +14,6 @@ export default function SignupForm({setIsSignup}) {
     const email = useRef();
     const password = useRef();
     const backToLogin = () => setIsSignup(false);
-    const locale = router.locale;
 
     const createUser = async (e) => {
         e.preventDefault();
@@ -52,13 +50,10 @@ export default function SignupForm({setIsSignup}) {
             return;
         }
 
-        try {
-            const { user } = await createUserWithEmailAndPassword(getAuth(), email.current.value, password.current.value);
+        AuthAdapter.createUser(email.current.value, password.current.value).then(() => {
             setIsSignup(false);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
             router.push('/');
-        } catch (error) {
+        }).catch((error) => {
             const message = error.message;
             toast({
                 title: "An error ocurred",
@@ -67,7 +62,7 @@ export default function SignupForm({setIsSignup}) {
                 duration: 6000,
                 isClosable: true
             })
-        }
+        })
     }
 
     return (
@@ -82,7 +77,7 @@ export default function SignupForm({setIsSignup}) {
                     <input ref={password} type="password" id="password" />
                     <input className={styles.authButton} type="submit" value={t('create')} onClick={createUser} />
                 </form>
-                <div className={styles.otherOption}>{locales[locale].auth.createAlreadyHave}<a onClick={backToLogin}>{t('login')}</a></div>
+                <div className={styles.otherOption}>{t('createAlreadyHave')}<a onClick={backToLogin}>{t('login')}</a></div>
             </div>
         </div>
     )

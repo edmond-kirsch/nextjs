@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,7 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from 'next/router';
 import styles from '../styles/MiniDrawer.module.css';
-import { logout } from '../auth/utils/logout';
+import AuthAdapter from '../auth/AuthAdapter';
 
 const drawerWidth = 240;
 
@@ -129,7 +128,7 @@ export default function MiniDrawer({children}) {
               <Typography variant="h6" noWrap component="div">
                 Softteco
               </Typography>
-              <button className={styles.headerLogout} onClick={logout}>Logout</button>
+              <button className={styles.headerLogout} onClick={AuthAdapter.logout}>Logout</button>
             </div>
           </Toolbar>
         </AppBar>

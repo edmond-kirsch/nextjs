@@ -82,6 +82,23 @@
     color: #92a4ac;
     cursor: default;
     text-align: center;
+    position: relative;
+}
+.emailSignIn::before {
+    content: '';
+    position: absolute;
+    width: calc(25vw - 215px);
+    border-bottom: 1px dashed black;
+    transform: translateX(-110%);
+    top: 50%
+}
+.emailSignIn::after {
+    content: '';
+    position: absolute;
+    width: calc(25vw - 215px);
+    border-bottom: 1px dashed black;
+    transform: translateX(10%);
+    top: 50%
 }
 .authForm {
     width: 100%;
@@ -134,6 +151,12 @@
     }
     .logoWrapper {
         display: none;
+    }
+    .emailSignIn::before {
+        width: calc(50vw - 200px);
+    }
+    .emailSignIn::after {
+        width: calc(50vw - 200px);
     }
 }
 .errorMessage {

@@ -87,7 +87,7 @@
 .emailSignIn::before {
     content: '';
     position: absolute;
-    width: calc(25vw - 215px);
+    width: calc(25vw - 250px);
     border-bottom: 1px dashed black;
     transform: translateX(-110%);
     top: 50%
@@ -95,7 +95,7 @@
 .emailSignIn::after {
     content: '';
     position: absolute;
-    width: calc(25vw - 215px);
+    width: calc(25vw - 250px);
     border-bottom: 1px dashed black;
     transform: translateX(10%);
     top: 50%

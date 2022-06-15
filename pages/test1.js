@@ -7,6 +7,7 @@ export default function Test1() {
         <Layout>
             <div>test1</div>
             <Link href="/">to home</Link>
+            <Link href={'/authenticated'}><a>to authenticated</a></Link>
         </Layout>
       
     )

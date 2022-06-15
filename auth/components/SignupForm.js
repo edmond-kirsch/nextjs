@@ -51,7 +51,6 @@ export default function SignupForm({setIsSignup}) {
         }
 
         AuthAdapter.createUser(email.current.value, password.current.value).then(() => {
-            setIsSignup(false);
             router.push('/');
         }).catch((error) => {
             const message = error.message;

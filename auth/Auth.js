@@ -19,7 +19,7 @@ export function Auth() {
         return AuthAdapter.getAuth().onAuthStateChanged(async (user) => {
             try {
                 if (user) {
-                    await routes.push('/');
+                    // await routes.push('/');
                 }
                 setPending(false);
             } catch(error) {

@@ -1,5 +1,5 @@
 import { signOut, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import {initializeApp as initializeClientApp, getApp as getClientApp} from 'firebase/app';
+import {initializeApp as initializeClientApp, getApp as getClientApp, getAuth as getClientAuth} from 'firebase/app';
 import { initializeApp, getApps, cert, getApp } from 'firebase-admin/app';
 import { GoogleProvider } from "./googleProvider";
 import nookies from 'nookies';
@@ -19,7 +19,8 @@ export default class AuthAdapter {
     constructor() {}
 
     static async logout() {
-        signOut(getAuth());
+        await signOut(getAuth());
+        nookies.set(undefined, "token", "", {});
     }
 
     static async loginWithGoogle() {
@@ -76,21 +77,16 @@ export default class AuthAdapter {
 
     static initFirebaseClient() {
         try {
-            getClientApp()
+            return getClientApp()
         } catch (err) {
-            initializeClientApp(firebaseConfig);
+            return initializeClientApp(firebaseConfig);
         }
-    }
-
-    static async verifyToken(token) {
-        await this.getFirebaseAdmin().auth().verifyIdToken(token);
     }
 
     static getAuth() {
         return getAuth();
     }
     static getToken() {
-        const token = getAuth().currentUser.accessToken;
-        return token;
+        return getAuth().currentUser ? getAuth().currentUser.accessToken : null
     }
 }

@@ -10,27 +10,30 @@ export const LoaderProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [pending, setPending] = useState(true);
     const routes = useRouter();
+    const cookieLocale = nookies.get().locale;
+    const output = !cookieLocale || cookieLocale === 'en' ? '' : `/${cookieLocale}`;
     AuthAdapter.initFirebaseClient();
     
     useEffect(() => {
         return AuthAdapter.getAuth().onIdTokenChanged(async (user) => {
-            if (window.location.pathname === '/auth' && user) {
+            const pathname = window.location.pathname.slice(window.location.pathname.lastIndexOf('/'))
+            if (pathname === '/auth' && user) {
                 const token = AuthAdapter.getToken();
                 nookies.set(undefined, "token", token, {});
                 setUser(user);
                 setPending(false);
-                return routes.push('/');
+                return routes.push(`${output}/`);
             }
             const cookies = nookies.get().token;
-            if (!cookies && window.location.pathname !== '/auth') {
+            if (!cookies && pathname !== '/auth') {
                 setPending(false);
                 return;
             }
-            if (!user && window.location.pathname !== '/auth') {
+            if (!user && pathname !== '/auth') {
                 nookies.destroy(undefined, 'token');
                 setPending(false);
                 setUser(null);
-                return routes.push('/auth');
+                return routes.push(`${output}/auth`);
             }
             setUser(user);
             setPending(false);

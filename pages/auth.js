@@ -9,6 +9,16 @@ export default function AuthPage() {
 }
 
 export async function getServerSideProps(ctx) {
+    const cookieLocale = nookies.get(ctx).locale;
+    if (cookieLocale && ctx.locale !== cookieLocale) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: `${cookieLocale}/auth`,
+        },
+        props: {},
+      };
+    }
     try {
         const token = nookies.get(ctx).token;
         if (token) {
@@ -27,4 +37,5 @@ export async function getServerSideProps(ctx) {
     return {
         props: {},
     };
+
 }

@@ -7,10 +7,9 @@ import { useAuth } from '../auth/LoaderProvider';
 import verifyToken from '../auth/verifyToken';
 import AuthAdapter from '../auth/AuthAdapter';
 
-export async function getServerSideProps(context) {
-  console.log(context.req.cookies)
-  const cookieLocale = nookies.get(context).locale;
-  if (cookieLocale && context.locale !== cookieLocale) {
+export async function getServerSideProps(ctx) {
+  const cookieLocale = nookies.get(ctx).locale;
+  if (cookieLocale && ctx.locale !== cookieLocale) {
     return {
       redirect: {
         permanent: false,
@@ -20,7 +19,7 @@ export async function getServerSideProps(context) {
     };
   }
   try {
-    const token = context.req.cookies ? context.req.cookies.token : null;
+    const token = nookies.get(ctx).token;
     if (token) {
       await verifyToken(token);
     } else {
@@ -29,12 +28,12 @@ export async function getServerSideProps(context) {
   } catch(error) {
     if (error !== 'no token') {
       AuthAdapter.logout();
-      context.res.writeHead(301, {
-        Location: '/auth'
-      });
-      context.res.end();
+      return {
+        redirect: {
+            destination: '/auth'
+        }
     }
-    console.log('index page error');
+    }
   }
   
   return {
@@ -46,7 +45,7 @@ export default function Home() {
   const { user } = useAuth();
   const { t } = useTranslation('home');
   const changeLocale = async (locale) => {
-    nookies.destroy('locale');
+    nookies.destroy(undefined, 'locale');
     nookies.set(null, "locale", locale, {});
     await setLanguage(locale);
   }
@@ -63,4 +62,3 @@ export default function Home() {
     </Layout>
   )
 }
-

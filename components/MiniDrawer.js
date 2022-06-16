@@ -100,12 +100,18 @@ const menuItems = [
   {text: 'test4', href: '/test4'},
 ]
 
+
 export default function MiniDrawer({children}) {
     const theme = useTheme();
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
+    const logout = async () => {
+      await AuthAdapter.logout();
+      await router.push('/');
+      
+    }
   
     return (
       <Box sx={{ display: 'flex' }}>
@@ -128,7 +134,7 @@ export default function MiniDrawer({children}) {
               <Typography variant="h6" noWrap component="div">
                 Softteco
               </Typography>
-              <button className={styles.headerLogout} onClick={AuthAdapter.logout}>Logout</button>
+              <button className={styles.headerLogout} onClick={logout}>Logout</button>
             </div>
           </Toolbar>
         </AppBar>

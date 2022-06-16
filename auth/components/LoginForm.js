@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import useTranslation from 'next-translate/useTranslation';
 import AuthAdapter from '../AuthAdapter';
-import { getServerSideProps } from '../../pages';
+import nookies from 'nookies';
 
 export default function LoginForm({ setIsSignup }) {
     const toast = useToast();
@@ -15,7 +15,7 @@ export default function LoginForm({ setIsSignup }) {
     const showCreateForm = () => setIsSignup(true);
 
     const loginWithGoogle = async () => {
-        AuthAdapter.loginWithGoogle().then(async () => await router.push('/', {getServerSideProps: true})).catch((error) => {
+        AuthAdapter.loginWithGoogle().then(async () => await router.push('/')).catch((error) => {
             const message = error.message;
             toast({
                 position: 'top',

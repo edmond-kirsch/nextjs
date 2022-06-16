@@ -2,7 +2,6 @@ import { signOut, getAuth, signInWithPopup, signInWithEmailAndPassword, createUs
 import {initializeApp as initializeClientApp, getApp as getClientApp, getAuth as getClientAuth} from 'firebase/app';
 import { initializeApp, getApps, cert, getApp } from 'firebase-admin/app';
 import { GoogleProvider } from "./googleProvider";
-import nookies from 'nookies';
 import serviceAccount from './secrets.json';
 
 const firebaseConfig = {
@@ -20,14 +19,11 @@ export default class AuthAdapter {
 
     static async logout() {
         await signOut(getAuth());
-        nookies.set(undefined, "token", "", {});
     }
 
     static async loginWithGoogle() {
         try {
-            const { user } = await signInWithPopup(getAuth(), GoogleProvider);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
+            await signInWithPopup(getAuth(), GoogleProvider);
         } catch (error) {
             throw new Error(error);
         }
@@ -35,9 +31,7 @@ export default class AuthAdapter {
 
     static async loginWithEmail(email, password) {
         try {
-            const { user } = await signInWithEmailAndPassword(getAuth(), email, password);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
+            await signInWithEmailAndPassword(getAuth(), email, password);
         } catch (error) {
             throw new Error(error);
         }
@@ -45,9 +39,7 @@ export default class AuthAdapter {
 
     static async createUser(email, password) {
         try {
-            const { user } = await createUserWithEmailAndPassword(getAuth(), email, password);
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {});
+            await createUserWithEmailAndPassword(getAuth(), email, password);
         } catch (error) {
             throw new Error(error);
         }
@@ -86,6 +78,7 @@ export default class AuthAdapter {
     static getAuth() {
         return getAuth();
     }
+
     static getToken() {
         return getAuth().currentUser ? getAuth().currentUser.accessToken : null
     }

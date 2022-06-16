@@ -14,16 +14,23 @@ export const LoaderProvider = ({children}) => {
     
     useEffect(() => {
         return AuthAdapter.getAuth().onIdTokenChanged(async (user) => {
+            if (window.location.pathname === '/auth' && user) {
+                const token = AuthAdapter.getToken();
+                nookies.set(undefined, "token", token, {});
+                setUser(user);
+                setPending(false);
+                return routes.push('/');
+            }
             const cookies = nookies.get().token;
-            if (!cookies && routes.asPath !== '/auth') {
+            if (!cookies && window.location.pathname !== '/auth') {
+                setPending(false);
                 return;
             }
-            if (!user && routes.asPath !== '/auth') {
-                nookies.set(undefined, "token", "", {});
-                await routes.push('/auth');;
+            if (!user && window.location.pathname !== '/auth') {
+                nookies.destroy(undefined, 'token');
                 setPending(false);
                 setUser(null);
-                return 
+                return routes.push('/auth');
             }
             setUser(user);
             setPending(false);

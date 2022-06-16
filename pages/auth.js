@@ -1,5 +1,6 @@
 import { Auth } from "../auth/Auth"
 import verifyToken from "../auth/verifyToken";
+import nookies from 'nookies';
 
 export default function AuthPage() {
     return (
@@ -7,15 +8,16 @@ export default function AuthPage() {
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(ctx) {
     try {
-        const token = context.req.cookies ? context.req.cookies.token : null;
+        const token = nookies.get(ctx).token;
         if (token) {
             await verifyToken(token);
-            context.res.writeHead(301, {
-                Location: '/'
-            });
-            context.res.end();
+            return {
+                redirect: {
+                    destination: '/'
+                }
+            }
         } else {
             throw new Error('no token')
         }

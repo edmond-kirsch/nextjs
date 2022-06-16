@@ -50,18 +50,18 @@ export default function SignupForm({setIsSignup}) {
             return;
         }
 
-        AuthAdapter.createUser(email.current.value, password.current.value).then(() => {
-            router.push('/');
-        }).catch((error) => {
-            const message = error.message;
-            toast({
-                title: "An error ocurred",
-                description: message,
-                status: "error",
-                duration: 6000,
-                isClosable: true
+        AuthAdapter.createUser(email.current.value, password.current.value)
+            .then(() => router.push('/'))
+            .catch(error => {
+                const message = error.message;
+                toast({
+                    title: "An error ocurred",
+                    description: message,
+                    status: "error",
+                    duration: 6000,
+                    isClosable: true
+                })
             })
-        })
     }
 
     return (

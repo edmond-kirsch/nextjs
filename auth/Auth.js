@@ -1,44 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useRef } from 'react';
 import { SwitchTransition, CSSTransition, Transition } from 'react-transition-group';
 import { ChakraProvider } from '@chakra-ui/react';
 import styles from './styles/Auth.module.css';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
-import Loading from './components/Loading';
 import AuthAdapter from './AuthAdapter';
 
 export function Auth() {
     AuthAdapter.initFirebaseClient();
     const [isSignup, setIsSignup] = useState(false);
     const nodeRef = useRef(null);
-    const routes = useRouter();
-    const [pending, setPending] = useState(true);
-
-    useEffect(() => {
-        return AuthAdapter.getAuth().onAuthStateChanged(async (user) => {
-            try {
-                if (user) {
-                    // await routes.push('/');
-                }
-                setPending(false);
-            } catch(error) {
-                const message = error.message;
-                toast({
-                    position: 'top',
-                    title: "An error ocurred",
-                    description: message,
-                    status: "error",
-                    duration: 6000,
-                    isClosable: true
-                })
-            }
-        })
-    }, [])
-
-    if (pending) {
-        return <Loading />
-    }
     
     return (
         <ChakraProvider>

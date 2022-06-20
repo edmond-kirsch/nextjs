@@ -1,0 +1,166 @@
+.wrapper {
+    width: 100vw;
+    max-width: 1920px;
+    height: 100vh;
+    background-color: #0f46a0;
+    display: flex;
+    justify-content: flex-end;
+    font-family: 'Open Sans';
+    margin: 0 auto;
+    overflow: hidden;
+}
+.logoWrapper {
+    width: 60%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.logo {
+    width: 40%;
+    height: 40%;
+    background-image: url('../assets//softteco.webp');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.authWrapper {
+    max-width: 810px;
+    width: 50%;
+    min-width: 320px;
+    height: 100vh;
+    background-color: #fff;
+    padding: 140px 100px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.auth {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+.auth h2 {
+    margin: 0;
+    font-size: 36px;
+    line-height: 49px;
+    text-align: center;
+}
+.auth p {
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+}
+.googleSignIn {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background-color: #fff;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 0;
+    transition-duration: .3s;
+}
+.googleSignIn:hover {
+    background-color: #eceff1;
+}
+.emailSignIn {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #92a4ac;
+    cursor: default;
+    text-align: center;
+    position: relative;
+}
+.emailSignIn::before {
+    content: '';
+    position: absolute;
+    width: calc(25vw - 250px);
+    border-bottom: 1px dashed black;
+    transform: translateX(-110%);
+    top: 50%
+}
+.emailSignIn::after {
+    content: '';
+    position: absolute;
+    width: calc(25vw - 250px);
+    border-bottom: 1px dashed black;
+    transform: translateX(10%);
+    top: 50%
+}
+.authForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.authForm label {
+    font-size: 14px;
+    line-height: 19px;
+}
+.authForm input {
+    height: 45px;
+    border: 1px solid #ded2d9;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    padding: 0;
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+.authForm input:last-child {
+    margin: 0;
+}
+.otherOption {
+    font-size: 18px;
+}
+.otherOption a {
+    color: #0f46a0;
+    cursor: pointer;
+}
+.authButton {
+    color: #fff;
+    background-color: #0f46a0;
+    font-size: 18px;
+    cursor: pointer;
+    transition-duration: .3s;
+}
+.authButton:hover {
+    color: #fff;
+    background-color: #1e96f0;
+}
+.authButton:disabled {
+    color: #fff;
+    background-color: #465a64;
+}
+@media (max-width: 950px) {
+    .authWrapper {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .logoWrapper {
+        display: none;
+    }
+    .emailSignIn::before {
+        width: calc(50vw - 200px);
+    }
+    .emailSignIn::after {
+        width: calc(50vw - 200px);
+    }
+}
+.errorMessage {
+    font-size: 14px;
+    color: red;
+    margin-bottom: 10px;
+}

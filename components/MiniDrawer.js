@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useRouter } from 'next/router';
 import styles from '../styles/MiniDrawer.module.css';
 import AuthAdapter from '../auth/AuthAdapter';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const drawerWidth = 240;
 
@@ -94,10 +95,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const menuItems = [
-  {text: 'test1', href: '/test1'},
-  {text: 'test2', href: '/test2'},
-  {text: 'test3', href: '/test3'},
-  {text: 'test4', href: '/test4'},
+  {text: 'analytics', href: '/analytics', icon: <BarChartIcon />},
+  {text: 'test2', href: '/test2', icon: <MailIcon />},
+  {text: 'test3', href: '/test3', icon: <MailIcon />},
+  {text: 'test4', href: '/test4', icon: <MailIcon />},
 ]
 
 
@@ -146,7 +147,7 @@ export default function MiniDrawer({children}) {
           </DrawerHeader>
           <Divider />
           <List>
-            {menuItems.map(({text, href, index}) => (
+            {menuItems.map(({text, href, icon, index}) => (
               <ListItem key={href} disablePadding sx={{ display: 'block' }} onClick={() => router.push(href)}>
                 <ListItemButton
                   sx={{
@@ -162,7 +163,7 @@ export default function MiniDrawer({children}) {
                       justifyContent: 'center',
                     }}
                   >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {icon}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>

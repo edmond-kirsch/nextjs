@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { SwitchTransition, CSSTransition, Transition } from 'react-transition-group';
-import { ChakraProvider } from '@chakra-ui/react';
 import styles from './styles/Auth.module.css';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
@@ -12,7 +11,6 @@ export function Auth() {
     const nodeRef = useRef(null);
     
     return (
-        <ChakraProvider>
         <div className={styles.wrapper}>
             <style jsx>{`
                 .${styles.logo}.entering {
@@ -87,6 +85,5 @@ export function Auth() {
                 </CSSTransition>
             </SwitchTransition>
         </div>
-        </ChakraProvider>
     )
 }

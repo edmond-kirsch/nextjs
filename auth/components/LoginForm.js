@@ -1,30 +1,22 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useToast } from '@chakra-ui/react';
 import styles from '../styles/Auth.module.css';
 import useTranslation from 'next-translate/useTranslation';
 import AuthAdapter from '../AuthAdapter';
-import nookies from 'nookies';
+import { ToastContext } from './ToastContext';
 
 export default function LoginForm({ setIsSignup }) {
-    const toast = useToast();
     const router = useRouter();
     const { t } = useTranslation('auth');
     const email = useRef();
     const password = useRef();
     const showCreateForm = () => setIsSignup(true);
+    const { showToast } = useContext(ToastContext);
 
     const loginWithGoogle = async () => {
         AuthAdapter.loginWithGoogle().then(async () => await router.push('/')).catch((error) => {
             const message = error.message;
-            toast({
-                position: 'top',
-                title: "An error ocurred",
-                description: message,
-                status: "error",
-                duration: 6000,
-                isClosable: true
-            })
+            showToast(message);
         })
     }
     
@@ -32,14 +24,7 @@ export default function LoginForm({ setIsSignup }) {
         event.preventDefault();
         AuthAdapter.loginWithEmail(email.current.value, password.current.value).then(async () => await router.push('/')).catch((error) => {
             const message = error.message;
-            toast({
-                position: 'top',
-                title: "An error ocurred",
-                description: message,
-                status: "error",
-                duration: 6000,
-                isClosable: true
-            })
+            showToast(message);
         })
     }
 

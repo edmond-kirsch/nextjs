@@ -1,10 +1,27 @@
 import { Auth } from "../auth/Auth"
 import verifyToken from "../auth/verifyToken";
 import nookies from 'nookies';
+import { useState } from "react";
+import { Snackbar, Alert } from "@mui/material";
+import { ToastContext } from "../auth/components/ToastContext";
 
 export default function AuthPage() {
+    const [toastIsOpened, setToastIsOpened] = useState(false);
+    const [toastMessage, setToastMessage] = useState('toast message');
+    const closeToast = () => setToastIsOpened(false);
+    const showToast = (message) => {
+        setToastMessage(message);
+        setToastIsOpened(true);
+    }
     return (
-        <Auth />
+        <ToastContext.Provider value={{showToast}}>
+            <Auth />
+            <Snackbar open={toastIsOpened} autoHideDuration={6000} onClose={closeToast} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={closeToast} severity="error" sx={{width: '100%'}}>
+                    {toastMessage}
+                </Alert>
+            </Snackbar>
+        </ToastContext.Provider>
     )
 }
 
